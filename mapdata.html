@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script type="text/javascript" src="echarts.min.js"></script>
+    <script type="text/javascript" src="echarts-gl.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script> -->
+    <script type="text/javascript" src="guangxi.js"></script>
+    <!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script> -->
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script> -->
+    <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+var geoCoordMap = {
+    "南宁市":[108.320004,22.82402],
+    "柳州市":[109.411703,24.314617],
+    "桂林市":[110.299121,25.274215],
+    "梧州市":[111.297604,23.474803],
+    "北海市":[109.119254,21.473343],
+    "防城港市":[108.345478,21.614631],
+    "钦州市":[108.624175,21.967127],
+    "贵港市":[109.602146,23.0936],
+    "玉林市":[110.154393,22.63136],
+    "百色市":[106.616285,23.897742],
+    "贺州市":[111.552056,24.414141],
+    "河池市":[108.062105,24.695899],
+    "来宾市":[109.229772,23.733766],
+    "崇左市":[107.353926,22.404108]
+};
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push(geoCoord.concat(data[i].value));
+        }
+    }
+    return res;
+};
+option = {
+    backgroundColor: '',
+    title: {
+        text: '广西区',
+        subtext: '互联网医疗服务情况监控',
+        // sublink: 'http://www.a.com',
+        left: 'center',
+        textStyle: {
+            color: '#fff'
+        }
+    },
+    tooltip: {
+        trigger: 'item',
+        type:'cross',
+        alwaysShowContent: false,
+        bordeRadius: 4,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.2)',
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        padding: 0,
+        position: "top",
+        textStyle: {
+            fontSize: 12,
+            color: '#333'
+        }
+    },
+    legend: {
+        orient: 'vertical',
+        top: 'bottom',
+        left: 'right',
+        data:['pm2.5'],
+        textStyle: {
+            color: '#fff'
+        }
+    },
+    visualMap: {
+        min: 0,
+        max: 300,
+        // splitNumber: 5,
+        // color: ['#d94e5d','#eac736','#50a3ba'],
+        text:['High','Low'],
+        x:'left',
+        y:'center',
+        realtime: false,
+        calculable: true,
+        inRange: {
+            color: ['lightskyblue','yellow', 'orangered']
+        },  
+        textStyle: {
+            color: '#fff'
+        }
+    },
+    geo: {
+        map: 'guangxi',
+        label: {
+            emphasis: {
+                show: false
+            }
+        },
+        itemStyle: {
+            normal: {
+                areaColor: '#323c48',
+                borderColor: '#111'
+            },
+            emphasis: {
+                areaColor: '#2a333d'
+            }
+        }
+    },
+    series: [
+        {
+            name: '数量',
+            type: 'scatter',
+            // type: 'map',
+            coordinateSystem: 'geo',
+            roam:true,
+            data: convertData([
+                {name: "南宁市", value: 1},
+                {name: "柳州市", value: 3},
+                {name: "桂林市", value: 10},
+                {name: "梧州市", value: 4},
+                {name: "北海市", value: 10},
+                {name: "防城港市", value: 10},
+                {name: "钦州市", value: 15},
+                {name: "贵港市", value: 10},
+                {name: "玉林市", value: 3},
+                {name: "百色市", value: 10},
+                {name: "贺州市", value: 10},
+                {name: "河池市", value: 5},
+                {name: "来宾市", value: 20},
+                {name: "崇左市", value: 10}
+            ]),
+            symbolSize: function (data) {
+                return data[2] * 2;
+        
+            },
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                emphasis: {
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }
+            }
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+</script>
+</body>
+</html>
